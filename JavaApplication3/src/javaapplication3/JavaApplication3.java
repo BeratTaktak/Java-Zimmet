@@ -1,11 +1,21 @@
-package JavaApplication3;
+package JavaApplication5;
 
 import java.util.Scanner;
 
 
-public class JavaApplication3 {
+public class JavaApplication5 {
     
-
+    static int Psayac = 0;
+    static int Dsayac = 0;
+    
+    static String [] pZimmetAdiDizi = new String[100];
+    static String [] pZimmetKoduDizi = new String[100];
+    static String [] pZimmetliPersonelDizi = new String[100];
+    static boolean [] aktifZimmetVarDizi = new boolean[100];
+    static String [] dDepoAdiDizi = new String[100];
+    static String [] dDepoKoduDizi = new String[100];
+    
+    
 
     static String pZimmetAdi = "Yok";
     static String pZimmetKodu = "0"; 
@@ -27,8 +37,8 @@ public class JavaApplication3 {
         
         while (secim != 0) { 
             System.out.println("");
-            System.out.println("ANA MENU");
-            System.out.println("-------------------------");
+            System.out.println("-------------------------------------------");
+            System.out.println("             ••• ANA MENU •••           ");
             System.out.println("1. Zimmet Islemi Yap");
             System.out.println("2. Zimmetleri Goruntule");
             System.out.println("0. Cikis");
@@ -43,14 +53,11 @@ public class JavaApplication3 {
             }
             s.nextLine(); 
 
-            if (secim == 1) {
-                zimmetIslemiMenusu(); 
-            } else if (secim == 2) {
-                zimmetleriGoruntuleMenusu();
-            } else if (secim == 0) {
-                System.out.println("Cikis yapiliyor.");
-            } else {
-                System.out.println("Hatali secim.");
+            switch (secim) {
+                case 1 -> zimmetIslemiMenusu();
+                case 2 -> zimmetleriGoruntuleMenusu();
+                case 0 -> System.out.println("Cikis yapiliyor.");
+                default -> System.out.println("Hatali secim.");
             }
         }
     }
@@ -62,8 +69,8 @@ public class JavaApplication3 {
         
         while (secim != 0) {
             System.out.println("");
-            System.out.println("ZIMMET ISLEM MENUSU");
-            System.out.println("-------------------------");
+            System.out.println("-------------------------------------------");
+            System.out.println("         ••• ZIMMET ISLEM MENUSU •••         ");
             System.out.println("1. Personele Zimmet Yap"); 
             System.out.println("2. Depoya Urun Tanimla");   
             System.out.println("0. Geri Don");
@@ -78,14 +85,11 @@ public class JavaApplication3 {
             }
             s.nextLine(); 
             
-            if (secim == 1) {
-                personeleZimmetYap(s);
-            } else if (secim == 2) {
-                depoyaUrunTanimla(s);
-            } else if (secim == 0) {
-                System.out.println("Ana menuye donuluyor.");
-            } else {
-                System.out.println("Hatali secim.");
+            switch (secim) {
+                case 1 -> personeleZimmetYap(s);
+                case 2 -> depoyaUrunTanimla(s);
+                case 0 -> System.out.println("Ana menuye donuluyor.");
+                default -> System.out.println("Hatali secim.");
             }
         }
     }
@@ -97,8 +101,8 @@ public class JavaApplication3 {
         
         while (secim != 0) {
             System.out.println("");
-            System.out.println("ZIMMET GORUNTULEME MENUSU");
-            System.out.println("-------------------------");
+            System.out.println("-------------------------------------------");
+            System.out.println("      ••• ZIMMET GORUNTULEME MENUSU •••      ");
             System.out.println("1. Personel Zimmetini Goruntule"); 
             System.out.println("2. Depo Bilgisini Goruntule");   
             System.out.println("0. Geri Don");
@@ -113,14 +117,11 @@ public class JavaApplication3 {
             }
             s.nextLine(); 
             
-            if (secim == 1) {
-                personelZimmetGoruntule();
-            } else if (secim == 2) {
-                depoBilgisiGoruntule();
-            } else if (secim == 0) {
-                System.out.println("Ana menuye donuluyor.");
-            } else {
-                System.out.println("Hatali secim.");
+            switch (secim) {
+                case 1 -> personelZimmetGoruntule();
+                case 2 -> depoBilgisiGoruntule();
+                case 0 -> System.out.println("Ana menuye donuluyor.");
+                default -> System.out.println("Hatali secim.");
             }
         }
     }
@@ -130,93 +131,100 @@ public class JavaApplication3 {
     //PERSONELE ZİMMET YAPMA
     static void personeleZimmetYap(Scanner s) { 
         System.out.println("");
-        System.out.println("PERSONELE YENI ZIMMET");
-        System.out.println("-------------------------");
+        System.out.println("-------------------------------------------");
+        System.out.println("        ••• PERSONELE YENI ZIMMET •••        ");
         
-        if (aktifZimmetVar) {
-            System.out.println("UYARI: Eski zimmet kaydi (" + pZimmetliPersonel + ") silinerek yeni kayit olusturuluyor.");
-        }
-
+        
+        if(Psayac <= 100){
+            
         System.out.print("Zimmetlenecek Personel Adini Girin (String): ");
-        pZimmetliPersonel = s.nextLine();
+        pZimmetliPersonel = s.nextLine(); 
+        pZimmetliPersonelDizi[Psayac] = pZimmetliPersonel;
+        
         
         System.out.print("Urun Adini Girin (String): ");
         pZimmetAdi = s.nextLine();
+        pZimmetAdiDizi [Psayac] = pZimmetAdi;
+        
+        
         
         System.out.print("Urun Kodunu Girin (String/Harf-Sayi): ");
         pZimmetKodu = s.nextLine();
+        pZimmetKoduDizi [Psayac] = pZimmetKodu;
         
-        aktifZimmetVar = true;
+        aktifZimmetVarDizi[Psayac] = aktifZimmetVar = true;
         System.out.println("Basarili: " + pZimmetliPersonel + " kisisine yeni zimmet basariyla yapildi.");
+        
+        
+        Psayac++;
+        }   
+        
     }
     
     //DEPOYA ÜRÜN TANIMLA
     static void depoyaUrunTanimla(Scanner s) { 
         System.out.println("");
-        System.out.println("DEPOYA URUN TANIMLAMA");
-        System.out.println("-------------------------");
+        System.out.println("-------------------------------------------");
+        System.out.println("        ••• DEPOYA URUN TANIMLAMA •••        ");
+        
+        if(Dsayac <= 100){
         
         System.out.print("Depo Urunu Adini Girin (String): ");
         dDepoAdi = s.nextLine();
+        dDepoAdiDizi[Dsayac] = dDepoAdi; 
         
         System.out.print("Depo Urunu Kodunu Girin (String/Harf-Sayi): ");
         dDepoKodu = s.nextLine();
+        dDepoKoduDizi[Dsayac] = dDepoKodu;
         
         System.out.println("Basarili: Depo urunu basariyla tanimlandi: " + dDepoAdi + " (" + dDepoKodu + ")");
+        
+        Dsayac++;
     }
+        
+      
+}
 
     // PERSONEL ZİMMETİ GÖRÜNTÜLEME
     static void personelZimmetGoruntule() { 
         System.out.println("");
-        System.out.println("PERSONEL ZIMMET DETAYI");
-        System.out.println("-------------------------");
+        System.out.println("        ••• PERSONEL ZIMMET DETAYI •••       ");
         
         if (aktifZimmetVar) {
-            System.out.println("Personel: " + pZimmetliPersonel);
-            System.out.println("Urun Adi: " + pZimmetAdi);
-            System.out.println("Urun Kodu: " + pZimmetKodu);
             
-            Scanner s = new Scanner(System.in);
+            for(int i = 0; i <= Psayac - 1; i++){
+            System.out.println("Personel: " + pZimmetliPersonelDizi[i]);
+            System.out.println("Urun Adi: " + pZimmetAdiDizi[i]);
+            System.out.println("Urun Kodu: " + pZimmetKoduDizi[i]);
             System.out.println("");
-            System.out.println("Zimmeti kaldirmak (iade almak) ister misiniz? (1: Evet, 0: Hayir)");
-            System.out.print("Secim: ");
-            
-            if (s.hasNextInt()) {
-                int secim = s.nextInt();
-                if (secim == 1) {
-                    aktifZimmetVar = false;
-                    pZimmetliPersonel = "Yok";
-                    pZimmetAdi = "Yok";
-                    pZimmetKodu = "0";
-                    System.out.println("Basarili: Zimmet basariyla kaldirildi.");
-                }
+        }
                 
-            }   
-            
-            else {
-                s.next(); 
-            }
-            
-        } 
+         
+    }
         
         else {
-            System.out.println("Personel zimmeti bulunmamaktadir.");
+            System.out.println("»» Personel zimmeti bulunmamaktadir.");
         }
         
     }
 
     //DEPO GÖRÜNTÜLEME
     static void depoBilgisiGoruntule() { 
+        System.out.println("");   
+        System.out.println("             ••• DEPO DETAYI •••             ");
         System.out.println("");
-        System.out.println("DEPO TANIM DETAYI");
-        System.out.println("-------------------------");
         
        
-        if (dDepoKodu == "0") {
-            System.out.println("Depoda tanimli ana urun bulunmamaktadir.");
+        if (dDepoKodu.equals("0")) {
+            System.out.println("»» Depoda tanimli ana urun bulunmamaktadir.");
         } else {
-            System.out.println("Urun Adi: " + dDepoAdi);
-            System.out.println("Urun Kodu: " + dDepoKodu);
+            for(int i = 0; i <= Dsayac - 1; i++){
+                
+                System.out.println("Urun Adi: " + dDepoAdiDizi[i]);
+                System.out.println("Urun Kodu: " + dDepoKoduDizi[i]);
+                System.out.println("");
+            }
+            
         }
     }
 }
