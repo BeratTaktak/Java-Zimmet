@@ -147,7 +147,7 @@ class Zimmet{
             s.nextLine(); // s.nextLine() komutu burada, s.nextInt()'den kalan artık veriyi (Enter tuşunu) temizleyerek programın akışını korur.
             
             switch (secim) {
-                case 1 -> personelZimmetGoruntule(s); // Metot içine Scanner İsmi yazılması o metodun içinde aynı Scannerı aynı isim ile kullanabileceğimiz anlamına gelir.
+                case 1 -> personelZimmetGoruntuleMenu();
                 case 2 -> depoBilgisiGoruntule(); // Bu metot içinde Scanner kullanılmadığı için tanımlanmadı.
                 case 0 -> System.out.println("Ana Menüye Dönülüyor.");
                 default -> System.out.println("Hatalı seçim.");
@@ -378,14 +378,52 @@ class Zimmet{
     }
 
     
+    //  PERSONEL ZİMMETİ GÖRÜNTÜLEME
+    static void personelZimmetGoruntuleMenu() { 
+        
+        Scanner s = new Scanner(System.in); 
+        int secim = -1;
+        
+        while (secim != 0) {
+            
+            System.out.println("");
+            System.out.println("-------------------------------------------");
+            System.out.println("          ••• PERSONEL ZİMMET GÖRÜNTÜLEME MENÜSÜ •••          ");
+            System.out.println("1. Personel Zimmeti Arama"); 
+            System.out.println("2. Personel Zimmet Listesini Görüntüle");   
+            System.out.println("0. Geri Dön");
+            System.out.print("Seçiminiz: ");
+            
+            if (s.hasNextInt()) { // = Eğer Int veri tipi ise. (Kullanıcının girdiği veri sayımı, virgüllü sayımı yoksa harfmi diye kontrol eder, eğer Int ise if çalışır.)
+                
+                secim = s.nextInt(); 
+            } 
+            else {
+                
+                System.out.println("HATA: Lütfen sadece rakam girin.");
+                s.next(); // Hatalı girişi temizlemek için kullanıldı.
+                
+                continue; // Continue komutunun tek ve temel görevi program akışını hemen kesmek ve en yakınındaki while veya for döngüsünün başına (koşul kontrol noktasına) geri dönmek.
+                          // !!Continue kendine en yakındaki döngüye döner ama o döngünün içinde olmak zorundadır eğer kod satırında continue ya en yakın döngü hemen üst satırında olsa bile
+                          // döngünün içinde değilse onu atlar ve içinde bulunduğu en yakın döngüye döner. (Sistem tarafından okunur ise !!)
+            }
+            
+            s.nextLine(); // s.nextLine() komutu burada, s.nextInt()'den kalan artık veriyi (Enter tuşunu) temizleyerek programın akışını korur.
+            
+            switch (secim) {
+                case 1 -> personelZimmetGoruntule(s);
+                case 2 -> personelZimmetListesiGoruntule(s);
+                case 0 -> System.out.println("Ana Menüye Dönülüyor.");
+                default -> System.out.println("Hatalı Seçim.");
+            }
+        }
+    }
     
-   
-    // PERSONEL ZİMMETİ GÖRÜNTÜLEME
-    
-    static void personelZimmetGoruntule(Scanner s) { 
+    //PERSONEL ZİMMET LİSTESİ GÖRÜNTÜLEME
+    static void personelZimmetListesiGoruntule(Scanner s) { 
         
         System.out.println("");
-        System.out.println("        ••• PERSONEL ZİMMET DETAYI SORGULAMA •••        ");
+        System.out.println("        ••• PERSONEL ZİMMET LİSTESİ •••        ");
         System.out.println("");
         
         if(Psayac == 0) {
@@ -394,8 +432,51 @@ class Zimmet{
             return; // Eğer sistem return okursa bulunduğu metot içindeki kodu derhal durdurur.
                     // return den sonra yazılan hiçbir kod çalıştırılmaz. Program akışı, metodu çağıran yere geri döner.
         }
+        
+        for(int i = 0; i < Psayac; i++){
+            
+            System.out.println("-------------------------------------------");
+            System.out.println("MEVCUT PERSONEL ZİMMETLERİ LİSTESİ:");
+            System.out.println("Kayıt Sırası: " + i);
+            System.out.println("Personel Adı: " + pZimmetliPersonelDizi[i]);
+            System.out.println("personel TC: " + pZimmetliPersonelTcDizi[i]);
+            System.out.println("Ürün Adı: " + pZimmetAdiDizi[i]);
+            System.out.println("Ürün Kodu: " + pZimmetKoduDizi[i]);
+        }
+    }
+    
+    
+    
+    
+   
+    // PERSONEL ZİMMETİ ARAMA 
+    static void personelZimmetGoruntule(Scanner s) { 
+        
+        System.out.println("");
+        System.out.println("        ••• PERSONEL ZİMMET ARAMA •••        ");
+        System.out.println("");
+        
+        if(Psayac == 0) {
+            System.out.println("   »» Kayıtlı personel zimmeti bulunmamaktadır.   ");
+            
+            return; // Eğer sistem return okursa bulunduğu metot içindeki kodu derhal durdurur.
+                    // return den sonra yazılan hiçbir kod çalıştırılmaz. Program akışı, metodu çağıran yere geri döner.
+        }
+        
+        for(int i = 0; i < Psayac; i++){
+            
+            System.out.println("-------------------------------------------");
+            System.out.println("MEVCUT PERSONEL ZİMMETLERİ LİSTESİ:");
+            System.out.println("Kayıt Sırası: " + i);
+            System.out.println("Personel Adı: " + pZimmetliPersonelDizi[i]);
+            System.out.println("personel TC: " + pZimmetliPersonelTcDizi[i]);
+            System.out.println("Ürün Adı: " + pZimmetAdiDizi[i]);
+            System.out.println("Ürün Kodu: " + pZimmetKoduDizi[i]);
+        }
+        
+        System.out.println("-------------------------------------------");
 
-        System.out.print("Personel TC'sini Giriniz (11 Rakam): ");
+        System.out.print("Zimmet aratmak veya silme işlemi yapmak için personel TC'sini Giriniz (11 Rakam): ");
         
         long arananTC = 0;
         
