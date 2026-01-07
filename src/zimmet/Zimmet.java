@@ -1,10 +1,13 @@
 package Zimmet;
 
 import java.util.Scanner;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 class Zimmet{
 
-   
+    
     static int Psayac = 0; // Personel sayacı
     static int Dsayac = 0; // Depo sayacı
     
@@ -12,15 +15,18 @@ class Zimmet{
     static String [] pZimmetAdiDizi = new String[100];
     static String [] pZimmetKoduDizi = new String[100];
     static String [] pZimmetliPersonelDizi = new String[100];
-    static long [] pZimmetliPersonelTcDizi = new long [100]; // LONG TANIMLANDI ÇÜNKÜ TC İNT İÇİNE SIĞMIYOR   
+    static long [] pZimmetliPersonelTcDizi = new long [100]; // LONG TANIMLANDI ÇÜNKÜ TC İNT İÇİNE SIĞMIYOR    
     static boolean [] aktifZimmetVarDizi = new boolean[100];
     
     static String [] dDepoAdiDizi = new String[100];
     static String [] dDepoKoduDizi = new String[100];
-   
+    
 
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        
+        verileriYukle(); 
+        
         anaMenuyuGoster(); 
     }
     
@@ -28,7 +34,7 @@ class Zimmet{
     
     //ANA MENÜ
     
-    static void anaMenuyuGoster() { 
+    static void anaMenuyuGoster() throws IOException { 
         
         Scanner s = new Scanner(System.in); 
         int secim = -1;
@@ -37,31 +43,32 @@ class Zimmet{
             
             System.out.println("");
             System.out.println("-------------------------------------------");
-            System.out.println("             ••• ANA MENÜ •••            ");
+            System.out.println("             ••• ANA MENÜ •••             ");
             System.out.println("1. Zimmet İşlemi Yap");
             System.out.println("2. Zimmetleri Görüntüle");
             System.out.println("0. Çıkış");
             System.out.print("Seçiminiz: ");
 
-            if (s.hasNextInt()) { // = Eğer Int veri tipi ise. (Kullanıcının girdiği veri sayımı, virgüllü sayımı yoksa harfmi diye kontrol eder, eğer Int ise if çalışır.)
+            if (s.hasNextInt()) {
                 secim = s.nextInt(); 
             } 
             else {
                 
                 System.out.println("HATA: Lütfen sadece rakam girin.");
-                s.next(); // Hatalı girişi temizlemek için kullanıldı.
+                s.next();
                 
-                continue; // Continue komutunun tek ve temel görevi program akışını hemen kesmek ve en yakınındaki while veya for döngüsünün başına (koşul kontrol noktasına) geri dönmek.
-                          // !!Continue kendine en yakındaki döngüye döner ama o döngünün içinde olmak zorundadır eğer kod satırında continue ya en yakın döngü hemen üst satırında olsa bile
-                          // döngünün içinde değilse onu atlar ve içinde bulunduğu en yakın döngüye döner. (Sistem tarafından okunur ise !!)
+                continue;
             }
             
-            s.nextLine(); // s.nextLine() komutu burada, s.nextInt()'den kalan artık veriyi (Enter tuşunu) temizleyerek programın akışını korur.
+            s.nextLine();
 
             switch (secim) {
                 case 1 -> zimmetIslemiMenusu();
                 case 2 -> zimmetleriGoruntuleMenusu();
-                case 0 -> System.out.println("Çıkış yapılıyor.");
+                case 0 -> {
+                    verileriKaydet();
+                    System.out.println("Çıkış yapılıyor.");
+                }
                 default -> System.out.println("Hatalı seçim.");
             }
         }
@@ -80,27 +87,25 @@ class Zimmet{
             
             System.out.println("");
             System.out.println("-------------------------------------------");
-            System.out.println("          ••• ZİMMET İŞLEM MENÜSÜ •••          ");
+            System.out.println("           ••• ZİMMET İŞLEM MENÜSÜ •••           ");
             System.out.println("1. Personele Zimmet Yap"); 
             System.out.println("2. Depoya Ürün Tanımla");   
             System.out.println("0. Geri Dön");
             System.out.print("Seçiminiz: ");
             
-            if (s.hasNextInt()) { // = Eğer Int veri tipi ise. (Kullanıcının girdiği veri sayımı, virgüllü sayımı yoksa harfmi diye kontrol eder, eğer Int ise if çalışır.)
+            if (s.hasNextInt()) {
                 
                 secim = s.nextInt(); 
             } 
             else {
                 
                 System.out.println("HATA: Lütfen sadece rakam girin.");
-                s.next(); // Hatalı girişi temizlemek için kullanıldı.
+                s.next(); 
                 
-                continue; // Continue komutunun tek ve temel görevi program akışını hemen kesmek ve en yakınındaki while veya for döngüsünün başına (koşul kontrol noktasına) geri dönmek.
-                          // !!Continue kendine en yakındaki döngüye döner ama o döngünün içinde olmak zorundadır eğer kod satırında continue ya en yakın döngü hemen üst satırında olsa bile
-                          // döngünün içinde değilse onu atlar ve içinde bulunduğu en yakın döngüye döner. (Sistem tarafından okunur ise !!)
+                continue;
             }
             
-            s.nextLine(); // s.nextLine() komutu burada, s.nextInt()'den kalan artık veriyi (Enter tuşunu) temizleyerek programın akışını korur.
+            s.nextLine();
             
             switch (secim) {
                 case 1 -> personeleZimmetYap(s);
@@ -124,31 +129,29 @@ class Zimmet{
             
             System.out.println("");
             System.out.println("-------------------------------------------");
-            System.out.println("        ••• ZİMMET GÖRÜNTÜLEME MENÜSÜ •••      ");
+            System.out.println("         ••• ZİMMET GÖRÜNTÜLEME MENÜSÜ •••       ");
             System.out.println("1. Personel Zimmeti Görüntüle"); 
             System.out.println("2. Depo Bilgisini Görüntüle");   
             System.out.println("0. Geri Dön");
             System.out.print("Seçiminiz: ");
             
-            if (s.hasNextInt()) { // = Eğer Int veri tipi ise. (Kullanıcının girdiği veri sayımı, virgüllü sayımı yoksa harfmi diye kontrol eder, eğer Int ise if çalışır.)
+            if (s.hasNextInt()) {
                 
                 secim = s.nextInt(); 
             } 
             else {
                 
                 System.out.println("HATA: Lütfen sadece rakam girin.");
-                s.next(); // Hatalı girişi temizlemek için kullanıldı.
+                s.next();
                 
-                continue; // Continue komutunun tek ve temel görevi program akışını hemen kesmek ve en yakınındaki while veya for döngüsünün başına (koşul kontrol noktasına) geri dönmek.
-                          // !!Continue kendine en yakındaki döngüye döner ama o döngünün içinde olmak zorundadır eğer kod satırında continue ya en yakın döngü hemen üst satırında olsa bile
-                          // döngünün içinde değilse onu atlar ve içinde bulunduğu en yakın döngüye döner. (Sistem tarafından okunur ise !!)
+                continue;
             }
             
-            s.nextLine(); // s.nextLine() komutu burada, s.nextInt()'den kalan artık veriyi (Enter tuşunu) temizleyerek programın akışını korur.
+            s.nextLine(); 
             
             switch (secim) {
-                case 1 -> personelZimmetGoruntuleMenu();
-                case 2 -> depoBilgisiGoruntule(); // Bu metot içinde Scanner kullanılmadığı için tanımlanmadı.
+                case 1 -> personelZimmetGoruntule(s);
+                case 2 -> depoBilgisiGoruntule();
                 case 0 -> System.out.println("Ana Menüye Dönülüyor.");
                 default -> System.out.println("Hatalı seçim.");
             }
@@ -165,13 +168,12 @@ class Zimmet{
             
              System.out.println("HATA: Maksimum zimmet sınırına ulaşıldı (100).");
              
-             return; // Eğer sistem return okursa bulunduğu metot içindeki kodu derhal durdurur.
-                    // return den sonra yazılan hiçbir kod çalıştırılmaz. Program akışı, metodu çağıran yere geri döner.
+             return;
         }
 
         System.out.println("");
         System.out.println("-------------------------------------------");
-        System.out.println("         ••• PERSONELE YENİ ZİMMET •••         ");
+        System.out.println("          ••• PERSONELE YENİ ZİMMET •••          ");
         
         
         // PERSONEL ADI GİRİŞİ(BOŞLUK KONTROLÜ)
@@ -181,9 +183,9 @@ class Zimmet{
             System.out.print("Zimmetlenecek Personel Adını Girin: ");
             String adGiris = s.nextLine();
             
-            String temizGiris = adGiris.trim();  // .trim komutu alınan verinin başındaki ve sonundaki boşlukları siler ama yazılar arasındaki boşluğu silmez.
+            String temizGiris = adGiris.replace('|', ' ').trim(); 
 
-            if (temizGiris.length() == 0) {  // Alınan veri trimlendikten sonra uzunluğu 0 ise kullanıcı sadece boşuk girişi yapmış demektir.
+            if (temizGiris.length() == 0) { 
                 
                 System.out.println("HATA: Personel Adı boşluk veya boş bırakılamaz.");
             }
@@ -203,15 +205,16 @@ class Zimmet{
             System.out.print("Personel TC Kimlik Numarası Girin (11 rakam):");
             
             
-            if(s.hasNextLong()){ // = Eğer Long veri tipi ise. (Kullanıcının girdiği veri sayımı, virgüllü sayımı yoksa harfmi diye kontrol eder, eğer long ise if çalışır.)
+            if(s.hasNextLong()){
                 
-              Tc = s.nextLong();
-              s.nextLine();  // s.nextLine() komutu burada, s.nextLong()'den kalan artık veriyi (Enter tuşunu) temizleyerek programın akışını korur.
-              
+             Tc = s.nextLong();
+             s.nextLine(); 
+             
+             
                 //TC ZATEN KULLANIMDAMI KONTROL NOKTASI
                 boolean tcZatenVar = false;      
                 for(int i = 0; i < Psayac; i++){
-            
+                    
                     if(pZimmetliPersonelTcDizi[i] == Tc && aktifZimmetVarDizi[i]){
                         
                         tcZatenVar = true;
@@ -224,14 +227,14 @@ class Zimmet{
                     
                     System.out.println("HATA: Bu Tc kimlik numarsı zaten kullanımda.");
                 }
-                //BİTİŞ
+                
                 
                 else{
 
                 // TC 11 HANE KONTROL NOKTASI
                 long geciciTc = Tc;
                 int basamakSayisi = 0;
-         
+                
                     if(geciciTc == 0){
                         
                         basamakSayisi = 1;
@@ -239,42 +242,41 @@ class Zimmet{
                     else{
                         
                         while(geciciTc != 0){
-                          
+                            
                             geciciTc /=10;
-                            basamakSayisi++;   
-                        }  
+                            basamakSayisi++;    
+                        }   
                     }
                     
                     if(basamakSayisi == 11){
                         
                         pZimmetliPersonelTcDizi[Psayac] = Tc;
-                        tcGecerli = true; 
+                        tcGecerli = true;    
                     }
                     else{
                         
                         System.out.println("HATA: TC Kimlik Numarası tam 11 haneli olmalıdır. Tekrar deneyin.");
-                    }  
+                    }   
                 }
-                //BİTİŞ
-            }   
+            }    
             else{
                 
                 System.out.println("HATA: TC Kimlik Numarası sadece rakamlardan oluşmalıdır.");
-                s.next(); // Hatalı girişi temizlemek için kullanıldı.
+                s.next();
             }
         }
-               
         
-       // ÜRÜN ADI GİRİŞİ (BOŞLUK KONTROLÜ)
+        
+        // ÜRÜN ADI GİRİŞİ (BOŞLUK KONTROLÜ)
         boolean urunAdGecerli = false;
         while (!urunAdGecerli) {
             
             System.out.print("Ürün Adını Girin: ");
             String urunAdGiris = s.nextLine();
 
-            String temizGiris = urunAdGiris.trim();  // .trim komutu alınan verinin başındaki ve sonundaki boşlukları siler ama yazılar arasındaki boşluğu silmez.
+            String temizGiris = urunAdGiris.replace('|', ' ').trim(); 
 
-            if (temizGiris.length() == 0) {  // Alınan veri trimlendikten sonra uzunluğu 0 ise kullanıcı sadece boşuk girişi yapmış demektir.
+            if (temizGiris.length() == 0) {
                 
                 System.out.println("HATA: Ürün Adı boşluk veya boş bırakılamaz.");
             } 
@@ -292,9 +294,9 @@ class Zimmet{
             System.out.print("Ürün Kodunu Girin: ");
             String urunKodGiris = s.nextLine();
 
-            String temizGiris = urunKodGiris.trim();  // .trim komutu alınan verinin başındaki ve sonundaki boşlukları siler ama yazılar arasındaki boşluğu silmez.
+            String temizGiris = urunKodGiris.replace('|', ' ').trim();
 
-            if (temizGiris.length() == 0) {  // Alınan veri trimlendikten sonra uzunluğu 0 ise kullanıcı sadece boşuk girişi yapmış demektir.
+            if (temizGiris.length() == 0) {
                 
                 System.out.println("HATA: Ürün Kodu boşluk veya boş bırakılamaz.");
             } 
@@ -304,13 +306,14 @@ class Zimmet{
                 urunKodGecerli = true;
             }
         }
-            
+        
+        
         aktifZimmetVarDizi[Psayac] = true;
-            
+        
         System.out.println("");
-            
+        
         System.out.println("Başarılı: " + pZimmetliPersonelDizi[Psayac] + " kişisine yeni zimmet başarıyla yapıldı.");
-            
+        
         Psayac++;
     }
     
@@ -321,16 +324,16 @@ class Zimmet{
     
     static void depoyaUrunTanimla(Scanner s) { 
         
-         if(Dsayac >= 100){
+          if(Dsayac >= 100){
+              
              System.out.println("HATA: Depoya daha fazla ürün girişi yapılamaz (100).");
              
-             return; // Eğer sistem return okursa bulunduğu metot içindeki kodu derhal durdurur.
-                    // return den sonra yazılan hiçbir kod çalıştırılmaz. Program akışı, metodu çağıran yere geri döner.
+             return;
         }
         
         System.out.println("");
         System.out.println("-------------------------------------------");
-        System.out.println("         ••• DEPOYA ÜRÜN TANIMLAMA •••         ");
+        System.out.println("          ••• DEPOYA ÜRÜN TANIMLAMA •••          ");
         
         
         // DEPO ÜRÜN ADI GİRİŞİ (BOŞLUK KONTROLÜ)
@@ -340,13 +343,11 @@ class Zimmet{
             System.out.print("Depo Ürünü Adını Girin: ");
             String depoAdGiris = s.nextLine();
             
-            String temizGiris = depoAdGiris.trim();  // .trim komutu alınan verinin başındaki ve sonundaki boşlukları siler ama yazılar arasındaki boşluğu silmez.
+            String temizGiris = depoAdGiris.replace('|', ' ').trim();
             
-            if (temizGiris.length() == 0) {  // Alınan veri trimlendikten sonra uzunluğu 0 ise kullanıcı sadece boşuk girişi yapmış demektir
-                
+            if (temizGiris.length() == 0) { 
                 System.out.println("HATA: Depo Ürünü Adı boşluk veya boş bırakılamaz.");
-            } 
-            else {
+            } else {
                 dDepoAdiDizi[Dsayac] = temizGiris;
                 depoAdGecerli = true;
             }
@@ -359,14 +360,11 @@ class Zimmet{
             System.out.print("Depo Ürünü Kodunu Girin: ");
             String depoKodGiris = s.nextLine();
 
-            String temizGiris = depoKodGiris.trim();  // .trim komutu alınan verinin başındaki ve sonundaki boşlukları siler ama yazılar arasındaki boşluğu silmez.
+            String temizGiris = depoKodGiris.replace('|', ' ').trim();
             
-            if (temizGiris.length() == 0) {  // Alınan veri trimlendikten sonra uzunluğu 0 ise kullanıcı sadece boşuk girişi yapmış demektir
-                
+            if (temizGiris.length() == 0) { 
                 System.out.println("HATA: Depo Ürünü Kodu boşluk veya boş bırakılamaz.");
-            } 
-            else {
-                
+            } else {
                 dDepoKoduDizi[Dsayac] = temizGiris;
                 depoKodGecerli = true;
             }
@@ -378,123 +376,41 @@ class Zimmet{
     }
 
     
-    //  PERSONEL ZİMMETİ GÖRÜNTÜLEME
-    static void personelZimmetGoruntuleMenu() { 
-        
-        Scanner s = new Scanner(System.in); 
-        int secim = -1;
-        
-        while (secim != 0) {
-            
-            System.out.println("");
-            System.out.println("-------------------------------------------");
-            System.out.println("          ••• PERSONEL ZİMMET GÖRÜNTÜLEME MENÜSÜ •••          ");
-            System.out.println("1. Personel Zimmeti Arama"); 
-            System.out.println("2. Personel Zimmet Listesini Görüntüle");   
-            System.out.println("0. Geri Dön");
-            System.out.print("Seçiminiz: ");
-            
-            if (s.hasNextInt()) { // = Eğer Int veri tipi ise. (Kullanıcının girdiği veri sayımı, virgüllü sayımı yoksa harfmi diye kontrol eder, eğer Int ise if çalışır.)
-                
-                secim = s.nextInt(); 
-            } 
-            else {
-                
-                System.out.println("HATA: Lütfen sadece rakam girin.");
-                s.next(); // Hatalı girişi temizlemek için kullanıldı.
-                
-                continue; // Continue komutunun tek ve temel görevi program akışını hemen kesmek ve en yakınındaki while veya for döngüsünün başına (koşul kontrol noktasına) geri dönmek.
-                          // !!Continue kendine en yakındaki döngüye döner ama o döngünün içinde olmak zorundadır eğer kod satırında continue ya en yakın döngü hemen üst satırında olsa bile
-                          // döngünün içinde değilse onu atlar ve içinde bulunduğu en yakın döngüye döner. (Sistem tarafından okunur ise !!)
-            }
-            
-            s.nextLine(); // s.nextLine() komutu burada, s.nextInt()'den kalan artık veriyi (Enter tuşunu) temizleyerek programın akışını korur.
-            
-            switch (secim) {
-                case 1 -> personelZimmetGoruntule(s);
-                case 2 -> personelZimmetListesiGoruntule(s);
-                case 0 -> System.out.println("Ana Menüye Dönülüyor.");
-                default -> System.out.println("Hatalı Seçim.");
-            }
-        }
-    }
-    
-    //PERSONEL ZİMMET LİSTESİ GÖRÜNTÜLEME
-    static void personelZimmetListesiGoruntule(Scanner s) { 
-        
-        System.out.println("");
-        System.out.println("        ••• PERSONEL ZİMMET LİSTESİ •••        ");
-        System.out.println("");
-        
-        if(Psayac == 0) {
-            System.out.println("   »» Kayıtlı personel zimmeti bulunmamaktadır.   ");
-            
-            return; // Eğer sistem return okursa bulunduğu metot içindeki kodu derhal durdurur.
-                    // return den sonra yazılan hiçbir kod çalıştırılmaz. Program akışı, metodu çağıran yere geri döner.
-        }
-        
-        for(int i = 0; i < Psayac; i++){
-            
-            System.out.println("-------------------------------------------");
-            System.out.println("MEVCUT PERSONEL ZİMMETLERİ LİSTESİ:");
-            System.out.println("Kayıt Sırası: " + i);
-            System.out.println("Personel Adı: " + pZimmetliPersonelDizi[i]);
-            System.out.println("personel TC: " + pZimmetliPersonelTcDizi[i]);
-            System.out.println("Ürün Adı: " + pZimmetAdiDizi[i]);
-            System.out.println("Ürün Kodu: " + pZimmetKoduDizi[i]);
-        }
-    }
     
     
+    // PERSONEL ZİMMETİ GÖRÜNTÜLEME
     
-    
-   
-    // PERSONEL ZİMMETİ ARAMA 
     static void personelZimmetGoruntule(Scanner s) { 
         
         System.out.println("");
-        System.out.println("        ••• PERSONEL ZİMMET ARAMA •••        ");
+        System.out.println("         ••• PERSONEL ZİMMET DETAYI SORGULAMA •••         ");
         System.out.println("");
         
         if(Psayac == 0) {
+            
             System.out.println("   »» Kayıtlı personel zimmeti bulunmamaktadır.   ");
             
-            return; // Eğer sistem return okursa bulunduğu metot içindeki kodu derhal durdurur.
-                    // return den sonra yazılan hiçbir kod çalıştırılmaz. Program akışı, metodu çağıran yere geri döner.
+            return;
         }
-        
-        for(int i = 0; i < Psayac; i++){
-            
-            System.out.println("-------------------------------------------");
-            System.out.println("MEVCUT PERSONEL ZİMMETLERİ LİSTESİ:");
-            System.out.println("Kayıt Sırası: " + i);
-            System.out.println("Personel Adı: " + pZimmetliPersonelDizi[i]);
-            System.out.println("personel TC: " + pZimmetliPersonelTcDizi[i]);
-            System.out.println("Ürün Adı: " + pZimmetAdiDizi[i]);
-            System.out.println("Ürün Kodu: " + pZimmetKoduDizi[i]);
-        }
-        
-        System.out.println("-------------------------------------------");
 
-        System.out.print("Zimmet aratmak veya silme işlemi yapmak için personel TC'sini Giriniz (11 Rakam): ");
+        System.out.print("Personel TC'sini Giriniz (11 Rakam): ");
         
         long arananTC = 0;
         
-       //VERİ TİPİ KONTROL NOKTASI
-        if (s.hasNextLong()) { // = Eğer Long veri tipi ise. (Kullanıcının girdiği veri sayımı, virgüllü sayımı yoksa harfmi diye kontrol eder, eğer long ise if çalışır.)
+        //VERİ TİPİ KONTROL NOKTASI
+        if (s.hasNextLong()) {
             
             arananTC = s.nextLong();
-            s.nextLine(); // s.nextLine() komutu burada, s.nextLong()'dan kalan artık veriyi (Enter tuşunu) temizleyerek programın akışını korur.
+            s.nextLine();
         } 
         else {
             
-             System.out.println("HATA: TC sorgulaması için sadece rakam girin.");
-             s.next(); // Hatalı girişi temizlemek için kullanıldı.
-             
-             return; // Eğer sistem return okursa bulunduğu metot içindeki kodu derhal durdurur.
-                    // return den sonra yazılan hiçbir kod çalıştırılmaz. Program akışı, metodu çağıran yere geri döner.
+            System.out.println("HATA: TC sorgulaması için sadece rakam girin.");
+            s.next();
+            
+            return;
         }
-        //BİTİŞ
+      
         
         //11 HANE KONTROL NOKTASI
         long geciciArananTC = arananTC; 
@@ -513,16 +429,14 @@ class Zimmet{
         
         if (basamakSayisi != 11) {
             
-             System.out.println("HATA: Sorgulanan TC 11 haneli olmalıdır.");
-             return; // Eğer sistem return okursa bulunduğu metot içindeki kodu derhal durdurur.
-                    // return den sonra yazılan hiçbir kod çalıştırılmaz. Program akışı, metodu çağıran yere geri döner.
+            System.out.println("HATA: Sorgulanan TC 11 haneli olmalıdır.");
+            return;
         } 
-        //BİTİŞ
 
         boolean bulundu = false;
         
         for(int i = 0; i < Psayac; i++){
-       
+        
             if (pZimmetliPersonelTcDizi[i] == arananTC && aktifZimmetVarDizi[i]) {
                 
                 System.out.println("-------------------------------------------");
@@ -541,14 +455,11 @@ class Zimmet{
                 if (s.hasNextInt()) {
                     
                     int secim = s.nextInt();
-                    s.nextLine(); // s.nextLine() komutu burada, s.nextLong()'dan kalan artık veriyi (Enter tuşunu) temizleyerek programın akışını korur.
+                    s.nextLine();
                     
-                    if (secim == 1) {
-                                                // Silinen personelin bulunduğu diziyi tekrar kullanabilmemiz için bir sonraki diziyi silinen boş dizi elemanına atıyoruz, 
-                                                // bu şekilde yeni bir dizi boşalıyor ve yine bir sonraki diziyi boş diziye atıyoruz,
-                                                // aynı işlemi son dizi elemanına kadar tekrarlıyoruz.
-                                          
-                        for (int j = i; j < Psayac - 1; j++) {  
+                    if (secim == 1) {                                    
+                                                 
+                        for (int j = i; j < Psayac - 1; j++) {              
                             
                             pZimmetAdiDizi[j] = pZimmetAdiDizi[j + 1];
                             pZimmetKoduDizi[j] = pZimmetKoduDizi[j + 1];
@@ -568,12 +479,12 @@ class Zimmet{
                     s.next(); 
                 }
                 
-                break; // Break olmadanda çalışır fakat. Eğer Kullanıcı bulundu ve gerekli işlemler yapıldıysa for döngüsünü bitirmek için kullanılır, 
-            }          // kullanıcı zaten bulunmuş dizideki kalan diğer elemanların teker teker aranmasına gerek yok.
+                break; 
+            }       
         }
         
         if (!bulundu) {
-            
+             
              System.out.println("HATA: Girilen TC kimlik numarasına ait aktif zimmet kaydı bulunamadı.");
         }
     }
@@ -584,7 +495,7 @@ class Zimmet{
     
     static void depoBilgisiGoruntule() { 
         
-        System.out.println("");     
+        System.out.println("");      
         System.out.println("             ••• DEPO DETAYI •••             ");
         System.out.println("");
         
@@ -592,11 +503,11 @@ class Zimmet{
             
             System.out.println("»» Depoda tanımlı ürün bulunmamaktadır.");
             
-            return; // Eğer sistem return okursa bulunduğu metot içindeki kodu derhal durdurur.
-                    // return den sonra yazılan hiçbir kod çalıştırılmaz. Program akışı, metodu çağıran yere geri döner.
+            return;
+                        
         }
         
-       
+        
         for(int i = 0; i < Dsayac; i++){
             
             System.out.println("-------------------------------------------");
@@ -606,5 +517,96 @@ class Zimmet{
         }
         
         System.out.println("-------------------------------------------");  
-    }   
+    }
+    
+
+    
+    // ZİMMETLERİ KAYDETME
+    
+    static void verileriKaydet() throws IOException {
+        
+      
+        File fZimmet = new File("zimmetler.txt");
+        FileWriter zimmetYaz = new FileWriter(fZimmet);
+        
+        for(int i = 0; i < Psayac; i++){
+            
+            if(aktifZimmetVarDizi[i]){
+                
+                zimmetYaz.write(pZimmetliPersonelDizi[i] + "|" + 
+                               pZimmetliPersonelTcDizi[i] + "|" + 
+                               pZimmetAdiDizi[i] + "|" + 
+                               pZimmetKoduDizi[i] + "\n");
+            }
+        }
+        zimmetYaz.close();
+        
+        File fDepo = new File("depo.txt");
+        FileWriter depoYaz = new FileWriter(fDepo);
+        
+        for(int i = 0; i < Dsayac; i++){
+            
+            depoYaz.write(dDepoAdiDizi[i] + "|" + dDepoKoduDizi[i] + "\n");
+        }
+        depoYaz.close();
+        
+    }
+    
+    
+    
+    
+    // ZİMMETLERİ OKUMA
+    
+    static void verileriYukle() throws IOException {
+        
+        File fZimmet = new File("zimmetler.txt");
+        FileWriter fwOlustur = new FileWriter(fZimmet, true);
+        fwOlustur.close();
+        
+        Scanner zimmetOku = new Scanner(fZimmet);
+        
+        while(zimmetOku.hasNextLine()){
+            
+            String satir = zimmetOku.nextLine();
+            String[] veri = satir.split("\\|"); 
+            
+            if(veri.length == 4){
+                
+                pZimmetliPersonelDizi[Psayac] = veri[0];
+                
+                Scanner sc = new Scanner(veri[1]);
+                
+                if(sc.hasNextLong()){
+                    
+                     pZimmetliPersonelTcDizi[Psayac] = sc.nextLong();
+                }
+                
+                pZimmetAdiDizi[Psayac] = veri[2];
+                pZimmetKoduDizi[Psayac] = veri[3];
+                aktifZimmetVarDizi[Psayac] = true;
+                Psayac++;
+            }
+        }
+        
+        
+        File fDepo = new File("depo.txt");
+
+        FileWriter fwDepoOlustur = new FileWriter(fDepo, true);
+        fwDepoOlustur.close();
+        
+        Scanner DepoOku = new Scanner(fDepo);
+        
+        while(DepoOku.hasNextLine()){
+            
+            String satir = DepoOku.nextLine();
+            String[] veri = satir.split("\\|");
+            
+            if(veri.length == 2){
+                
+                dDepoAdiDizi[Dsayac] = veri[0];
+                dDepoKoduDizi[Dsayac] = veri[1];
+                Dsayac++;
+            }
+        }
+    }
 }
