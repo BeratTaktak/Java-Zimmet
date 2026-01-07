@@ -46,6 +46,8 @@ class Zimmet{
             System.out.println("             ••• ANA MENÜ •••             ");
             System.out.println("1. Zimmet İşlemi Yap");
             System.out.println("2. Zimmetleri Görüntüle");
+            System.out.println("3. TÜM ZİMMETLERİ SİL (Temizle)");
+            System.out.println("4. TÜM DEPOYU SİL (Temizle)");
             System.out.println("0. Çıkış");
             System.out.print("Seçiminiz: ");
 
@@ -65,6 +67,8 @@ class Zimmet{
             switch (secim) {
                 case 1 -> zimmetIslemiMenusu();
                 case 2 -> zimmetleriGoruntuleMenusu();
+                case 3 -> tumZimmetleriSil();
+                case 4 -> tumDepoUrunleriniSil();
                 case 0 -> {
                     verileriKaydet();
                     System.out.println("Çıkış yapılıyor.");
@@ -609,4 +613,84 @@ class Zimmet{
             }
         }
     }
+    
+    
+    
+    // TÜM ZİMMETLERİ SİLME
+    
+    static void tumZimmetleriSil() throws IOException {
+        Scanner s = new Scanner(System.in);
+        
+        System.out.println("-------------------------------------------");
+        System.out.println("!!! DİKKAT !!!");
+        System.out.println("Kayıtlı TÜM zimmet verileri silinecek ve geri getirilemez.");
+        System.out.println("Onaylıyor musunuz? (1: Evet 0: Hayır)");
+        System.out.print("Seçim: ");
+        
+        if(s.hasNextInt()){
+            
+            int onay = s.nextInt();
+            s.nextLine();
+            
+            if(onay == 1){
+               
+                Psayac = 0; 
+                
+                verileriKaydet(); 
+                
+                System.out.println(">> Başarılı: Tüm zimmet kayıtları silindi ve sistem temizlendi.");
+            }
+            
+            else {
+                
+                System.out.println("İşlem iptal edildi.");
+            } 
+        }
+        
+        else {
+            
+            System.out.println("Hatalı tuşlama, işlem iptal.");
+        }
+    }
+    
+    
+    
+    // TÜM DEPO ÜRÜNLERİNİ SİLME
+    static void tumDepoUrunleriniSil() throws IOException {
+        Scanner s = new Scanner(System.in);
+
+        System.out.println("-------------------------------------------");
+        System.out.println("!!! DİKKAT !!!");
+        System.out.println("Depoda tanımlı TÜM ürünler silinecek.");
+        System.out.println("Onaylıyor musunuz? (1: Evet, 0: Hayır)");
+        System.out.print("Seçim: ");
+
+        if (s.hasNextInt()) {
+            
+            int onay = s.nextInt();
+            s.nextLine();
+
+            if (onay == 1) {
+
+                Dsayac = 0; 
+                
+                verileriKaydet();
+                
+                System.out.println(">> Başarılı: Depo tamamen temizlendi.");
+            } 
+            
+            else {
+                
+                System.out.println("İşlem iptal edildi.");
+            } 
+        }
+        
+        else {
+            
+            System.out.println("Hatalı tuşlama, işlem iptal.");
+        }
+    }
+    
+    
+    
 }
