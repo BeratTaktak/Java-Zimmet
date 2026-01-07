@@ -25,7 +25,7 @@ class Zimmet{
     
     public static void main(String[] args) throws IOException {
         
-        verileriYukle(); 
+        verileriOku(); 
         
         anaMenuyuGoster(); 
     }
@@ -557,7 +557,7 @@ class Zimmet{
     
     // ZİMMETLERİ OKUMA
     
-    static void verileriYukle() throws IOException {
+    static void verileriOku() throws IOException {
         
         File fZimmet = new File("zimmetler.txt");
         FileWriter fwOlustur = new FileWriter(fZimmet, true);
