@@ -12,14 +12,14 @@ class Zimmet{
     static int Dsayac = 0; // Depo sayacı
     
     
-    static String [] pZimmetAdiDizi = new String[100];
-    static String [] pZimmetKoduDizi = new String[100];
-    static String [] pZimmetliPersonelDizi = new String[100];
-    static long [] pZimmetliPersonelTcDizi = new long [100]; // LONG TANIMLANDI ÇÜNKÜ TC İNT İÇİNE SIĞMIYOR    
-    static boolean [] aktifZimmetVarDizi = new boolean[100];
+    static String [] pUrunAdi = new String[100];
+    static String [] pUrunKodu = new String[100];
+    static String [] pİsim = new String[100];
+    static long [] pİsimTC = new long [100]; // LONG TANIMLANDI ÇÜNKÜ TC İNT İÇİNE SIĞMIYOR    
+    static boolean [] pAktif = new boolean[100];
     
-    static String [] dDepoAdiDizi = new String[100];
-    static String [] dDepoKoduDizi = new String[100];
+    static String [] dUrunAdi = new String[100];
+    static String [] dUrunKodu = new String[100];
     
 
     
@@ -195,7 +195,7 @@ class Zimmet{
             }
             else {
                 
-                pZimmetliPersonelDizi[Psayac] = temizGiris;
+                pİsim[Psayac] = temizGiris;
                 adGecerli = true;
             }
         }
@@ -219,7 +219,7 @@ class Zimmet{
                 boolean tcZatenVar = false;      
                 for(int i = 0; i < Psayac; i++){
                     
-                    if(pZimmetliPersonelTcDizi[i] == Tc && aktifZimmetVarDizi[i]){
+                    if(pİsimTC[i] == Tc && pAktif[i]){
                         
                         tcZatenVar = true;
                         break;    
@@ -254,7 +254,7 @@ class Zimmet{
                     
                     if(basamakSayisi == 11){
                         
-                        pZimmetliPersonelTcDizi[Psayac] = Tc;
+                        pİsimTC[Psayac] = Tc;
                         tcGecerli = true;    
                     }
                     else{
@@ -286,7 +286,7 @@ class Zimmet{
             } 
             else {
                 
-                pZimmetAdiDizi [Psayac] = temizGiris;
+                pUrunAdi [Psayac] = temizGiris;
                 urunAdGecerli = true;
             }
         }
@@ -306,17 +306,17 @@ class Zimmet{
             } 
             else {
                 
-                pZimmetKoduDizi [Psayac] = temizGiris;
+                pUrunKodu [Psayac] = temizGiris;
                 urunKodGecerli = true;
             }
         }
         
         
-        aktifZimmetVarDizi[Psayac] = true;
+        pAktif[Psayac] = true;
         
         System.out.println("");
         
-        System.out.println("Başarılı: " + pZimmetliPersonelDizi[Psayac] + " kişisine yeni zimmet başarıyla yapıldı.");
+        System.out.println("Başarılı: " + pİsim[Psayac] + " kişisine yeni zimmet başarıyla yapıldı.");
         
         Psayac++;
     }
@@ -352,7 +352,7 @@ class Zimmet{
             if (temizGiris.length() == 0) { 
                 System.out.println("HATA: Depo Ürünü Adı boşluk veya boş bırakılamaz.");
             } else {
-                dDepoAdiDizi[Dsayac] = temizGiris;
+                dUrunAdi[Dsayac] = temizGiris;
                 depoAdGecerli = true;
             }
         }
@@ -369,12 +369,12 @@ class Zimmet{
             if (temizGiris.length() == 0) { 
                 System.out.println("HATA: Depo Ürünü Kodu boşluk veya boş bırakılamaz.");
             } else {
-                dDepoKoduDizi[Dsayac] = temizGiris;
+                dUrunKodu[Dsayac] = temizGiris;
                 depoKodGecerli = true;
             }
         }
         
-        System.out.println("Başarılı: Depo ürünü başarıyla tanımlandı: " + dDepoAdiDizi[Dsayac] + " (" + dDepoKoduDizi[Dsayac] + ")");
+        System.out.println("Başarılı: Depo ürünü başarıyla tanımlandı: " + dUrunAdi[Dsayac] + " (" + dUrunKodu[Dsayac] + ")");
         
         Dsayac++; 
     }
@@ -441,14 +441,14 @@ class Zimmet{
         
         for(int i = 0; i < Psayac; i++){
         
-            if (pZimmetliPersonelTcDizi[i] == arananTC && aktifZimmetVarDizi[i]) {
+            if (pİsimTC[i] == arananTC && pAktif[i]) {
                 
                 System.out.println("-------------------------------------------");
                 System.out.println("Kayıt Sırası: " + i);
-                System.out.println("Personel Adı: " + pZimmetliPersonelDizi[i]);
-                System.out.println("TC: " + pZimmetliPersonelTcDizi[i]);
-                System.out.println("Ürün Adı: " + pZimmetAdiDizi[i]);
-                System.out.println("Ürün Kodu: " + pZimmetKoduDizi[i]);
+                System.out.println("Personel Adı: " + pİsim[i]);
+                System.out.println("TC: " + pİsimTC[i]);
+                System.out.println("Ürün Adı: " + pUrunAdi[i]);
+                System.out.println("Ürün Kodu: " + pUrunKodu[i]);
                 System.out.println("-------------------------------------------");
                 
                 bulundu = true;
@@ -465,16 +465,16 @@ class Zimmet{
                                                  
                         for (int j = i; j < Psayac - 1; j++) {              
                             
-                            pZimmetAdiDizi[j] = pZimmetAdiDizi[j + 1];
-                            pZimmetKoduDizi[j] = pZimmetKoduDizi[j + 1];
-                            pZimmetliPersonelDizi[j] = pZimmetliPersonelDizi[j + 1];
-                            pZimmetliPersonelTcDizi[j] = pZimmetliPersonelTcDizi[j + 1];
-                            aktifZimmetVarDizi[j] = aktifZimmetVarDizi[j + 1];
+                            pUrunAdi[j] = pUrunAdi[j + 1];
+                            pUrunKodu[j] = pUrunKodu[j + 1];
+                            pİsim[j] = pİsim[j + 1];
+                            pİsimTC[j] = pİsimTC[j + 1];
+                            pAktif[j] = pAktif[j + 1];
                         }
                         
                         Psayac--;
                         
-                        System.out.println("Başarılı: Zimmet kaydı kaldırıldı (Sırası: " + i + ")");  
+                        System.out.println("Başarılı: Zimmet kaydı kaldırıldı");  
                     }
                 } 
                 else {
@@ -516,8 +516,8 @@ class Zimmet{
             
             System.out.println("-------------------------------------------");
             System.out.println("Kayıt Sırası: " + i);
-            System.out.println("Ürün Adı: " + dDepoAdiDizi[i]);
-            System.out.println("Ürün Kodu: " + dDepoKoduDizi[i]);
+            System.out.println("Ürün Adı: " + dUrunAdi[i]);
+            System.out.println("Ürün Kodu: " + dUrunKodu[i]);
         }
         
         System.out.println("-------------------------------------------");  
@@ -535,12 +535,12 @@ class Zimmet{
         
         for(int i = 0; i < Psayac; i++){
             
-            if(aktifZimmetVarDizi[i]){
+            if(pAktif[i]){
                 
-                zimmetYaz.write(pZimmetliPersonelDizi[i] + "|" + 
-                               pZimmetliPersonelTcDizi[i] + "|" + 
-                               pZimmetAdiDizi[i] + "|" + 
-                               pZimmetKoduDizi[i] + "\n");
+                zimmetYaz.write(pİsim[i] + "|" + 
+                               pİsimTC[i] + "|" + 
+                               pUrunAdi[i] + "|" + 
+                               pUrunKodu[i] + "\n");
             }
         }
         zimmetYaz.close();
@@ -550,7 +550,7 @@ class Zimmet{
         
         for(int i = 0; i < Dsayac; i++){
             
-            depoYaz.write(dDepoAdiDizi[i] + "|" + dDepoKoduDizi[i] + "\n");
+            depoYaz.write(dUrunAdi[i] + "|" + dUrunKodu[i] + "\n");
         }
         depoYaz.close();
         
@@ -564,8 +564,11 @@ class Zimmet{
     static void verileriOku() throws IOException {
         
         File fZimmet = new File("zimmetler.txt");
-        FileWriter fwOlustur = new FileWriter(fZimmet, true);
-        fwOlustur.close();
+        
+        if (!fZimmet.exists()) { 
+            
+            fZimmet.createNewFile();
+        }
         
         Scanner zimmetOku = new Scanner(fZimmet);
         
@@ -576,27 +579,30 @@ class Zimmet{
             
             if(veri.length == 4){
                 
-                pZimmetliPersonelDizi[Psayac] = veri[0];
+                pİsim[Psayac] = veri[0];
                 
                 Scanner sc = new Scanner(veri[1]);
                 
                 if(sc.hasNextLong()){
                     
-                     pZimmetliPersonelTcDizi[Psayac] = sc.nextLong();
+                     pİsimTC[Psayac] = sc.nextLong();
                 }
                 
-                pZimmetAdiDizi[Psayac] = veri[2];
-                pZimmetKoduDizi[Psayac] = veri[3];
-                aktifZimmetVarDizi[Psayac] = true;
+                pUrunAdi[Psayac] = veri[2];
+                pUrunKodu[Psayac] = veri[3];
+                pAktif[Psayac] = true;
                 Psayac++;
             }
         }
+        zimmetOku.close();
         
         
         File fDepo = new File("depo.txt");
 
-        FileWriter fwDepoOlustur = new FileWriter(fDepo, true);
-        fwDepoOlustur.close();
+        if (!fDepo.exists()) {
+            
+            fDepo.createNewFile();
+        }
         
         Scanner DepoOku = new Scanner(fDepo);
         
@@ -607,11 +613,12 @@ class Zimmet{
             
             if(veri.length == 2){
                 
-                dDepoAdiDizi[Dsayac] = veri[0];
-                dDepoKoduDizi[Dsayac] = veri[1];
+                dUrunAdi[Dsayac] = veri[0];
+                dUrunKodu[Dsayac] = veri[1];
                 Dsayac++;
             }
         }
+        DepoOku.close();
     }
     
     
